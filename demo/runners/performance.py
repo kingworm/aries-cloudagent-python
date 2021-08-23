@@ -256,7 +256,7 @@ class FaberAgent(BaseAgent):
 
 async def main(
     start_port: int,
-    threads: int = 20,
+    threads: int = 50,
     action: str = None,
     show_timing: bool = False,
     multitenant: bool = False,
@@ -264,7 +264,7 @@ async def main(
     use_did_exchange: bool = False,
     revocation: bool = False,
     tails_server_base_url: str = None,
-    issue_count: int = 300,
+    issue_count: int = 1000,
     wallet_type: str = None,
 ):
 
@@ -363,9 +363,9 @@ async def main(
                 await alice_mediator_agent.reset_timing()
                 await faber_mediator_agent.reset_timing()
 
-        batch_size = 100
+        batch_size = 10
 
-        semaphore = asyncio.Semaphore(threads)
+        semaphore = asyncio.Semaphore(100)
 
         def done_propose(fut: asyncio.Task):
             semaphore.release()
@@ -580,7 +580,7 @@ if __name__ == "__main__":
         "-c",
         "--count",
         type=int,
-        default=300,
+        default=1000,
         help="Set the number of credentials to issue",
     )
     parser.add_argument(
@@ -627,7 +627,7 @@ if __name__ == "__main__":
         "-t",
         "--threads",
         type=int,
-        default=10,
+        default=50,
         help="Set the number of concurrent exchanges to start",
     )
     parser.add_argument(
